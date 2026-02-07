@@ -11,20 +11,42 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      // TEMP MOCK AUTH
-      if (email === "demo@secure.com" && password === "password") {
-        localStorage.setItem("token", "demo.jwt.token");
-        router.push("/dashboard");
-      } else {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!res.ok) {
         throw new Error("Invalid credentials");
       }
-    } catch {
+
+      const data = await res.json();
+
+      if (!data.access_token) {
+        throw new Error("Token missing");
+      }
+
+      // Save JWT
+      localStorage.setItem("token", data.access_token);
+
+      // Redirect
+      router.push("/dashboard");
+    } catch (err) {
       setError("Invalid email or password");
     } finally {
       setLoading(false);
@@ -32,135 +54,79 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4 sm:px-6 fade-up">
-      <div className="flex w-full max-w-[1400px] min-h-[520px] overflow-hidden rounded-3xl shadow-2xl bg-white md:bg-transparent">
+    <main className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white p-10 rounded-2xl shadow-xl">
+        <h2 className="text-2xl font-semibold mb-6 text-black">
+          Log in
+        </h2>
 
-        {/* LEFT SECTION (DESKTOP ONLY) */}
-      <div
-        className="hidden md:flex w-1/2 relative p-12 text-white bg-cover bg-center"
-        style={{ backgroundImage: "url('/login-bg.jpg')" }}
-      >
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/60" />
-
-        {/* Content */}
-        <div className="relative z-10 flex flex-col justify-end">
-          <h1 className="text-4xl font-bold mb-4">
-            Welcome Back!
-          </h1>
-          <p className="text-gray-300 max-w-sm">
-            Secure access to protected content with zero-trust architecture.
-          </p>
-        </div>
-      </div>
-
-
-        {/* RIGHT SECTION */}
-        <div className="w-full md:w-1/2 bg-white p-6 sm:p-10 flex items-center justify-center">
-          <div
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="
               w-full
-              max-w-md
-              mx-auto
-              text-base
-              md:scale-115
-              scale-100
+              rounded-full
+              bg-white
+              border
+              border-gray-300
+              px-5
+              py-3
+              sm:px-6
+              sm:py-4
+              text-sm
+              sm:text-base
+              text-black
+              placeholder:text-gray-500
+              outline-none
+              focus:ring-2
+              focus:ring-black
             "
-          >
-            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 sm:mb-8">
-              Log in
-            </h2>
+          />
 
-            <form onSubmit={handleLogin} className="space-y-4 sm:space-y-6">
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="
-                  w-full
-                  rounded-full
-                  bg-gray-100
-                  px-5
-                  py-3
-                  sm:px-6
-                  sm:py-4
-                  text-sm
-                  sm:text-base
-                  text-gray-900
-                  outline-none
-                  focus:ring-2
-                  focus:ring-black
-                "
-              />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="
+              w-full
+              rounded-full
+              bg-white
+              border
+              border-gray-300
+              px-5
+              py-3
+              sm:px-6
+              sm:py-4
+              text-sm
+              sm:text-base
+              text-black
+              placeholder:text-gray-500
+              outline-none
+              focus:ring-2
+              focus:ring-black
+            "
+          />
 
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="
-                  w-full
-                  rounded-full
-                  bg-gray-100
-                  px-5
-                  py-3
-                  sm:px-6
-                  sm:py-4
-                  text-sm
-                  sm:text-base
-                  text-gray-900
-                  outline-none
-                  focus:ring-2
-                  focus:ring-black
-                "
-              />
-
-              <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500">
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" className="accent-black" />
-                  Remember me
-                </label>
-                <span className="cursor-pointer hover:underline">
-                  Forgot password?
-                </span>
-              </div>
-
-              {error && (
-                <p className="text-sm text-red-600 text-center">
-                  {error}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="
-                  w-full
-                  rounded-full
-                  bg-black
-                  py-3
-                  sm:py-4
-                  text-sm
-                  sm:text-base
-                  font-semibold
-                  text-white
-                  hover:opacity-90
-                  disabled:opacity-50
-                "
-              >
-                {loading ? "Signing in..." : "Log in"}
-              </button>
-            </form>
-
-            <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-400">
-              Zero-Trust • Permission-Blind Frontend
+          {error && (
+            <p className="text-red-600 text-sm text-center">
+              {error}
             </p>
-          </div>
-        </div>
+          )}
 
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white py-3 rounded-full font-semibold disabled:opacity-50"
+          >
+            {loading ? "Signing in..." : "Log in"}
+          </button>
+        </form>
       </div>
     </main>
   );
