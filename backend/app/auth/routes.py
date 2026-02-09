@@ -7,11 +7,11 @@ def login(data: dict, request: Request):
     email = data.get("email")
     password = data.get("password")
 
-    # 🔐 Replace with DB check
+    #  Replace with DB check
     if email != "test@gmail.com" or password != "1234":
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    # ✅ Store login state in session
+    #  Store login state in session
     request.session["user"] = {
         "email": email,
         "verified": True
