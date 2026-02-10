@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
 
 export default function WatchMovie() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -53,9 +52,6 @@ export default function WatchMovie() {
 
   return (
     <>
-      {/* NAVBAR */}
-      <Navbar />
-
       <main className="min-h-screen bg-black flex flex-col items-center justify-start px-6 pt-24">
         {/* TITLE */}
         <h1 className="text-white text-xl md:text-2xl -mt-15 mb-12 font-semibold">
