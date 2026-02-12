@@ -1,0 +1,54 @@
+🚀 SECURE CONTENT DISTRIBUTION PLATFORM — TECH STACK
+
+========================================
+🖥 FRONTEND
+========================================
+Framework: Next.js
+Language: JavaScript / TypeScript
+Styling: Tailwind CSS
+Authentication: JWT (stored in localStorage)
+Video Player: Custom HTML5 Video + React State
+Fullscreen API: Browser Fullscreen API
+State Management: React Hooks (useState, useEffect)
+Routing: Next.js App Router
+UI Animations: CSS + Tailwind transitions
+
+----------------------------------------
+
+⚙ BACKEND
+========================================
+Framework: FastAPI
+Language: Python
+Authentication: JWT (python-jose)
+Password Hashing: Passlib (bcrypt)
+ORM: SQLAlchemy
+Validation: Pydantic
+Server: Uvicorn (ASGI)
+CORS Handling: FastAPI CORSMiddleware
+
+----------------------------------------
+
+🗃 DATABASE
+========================================
+Database: SQLite
+ORM Layer: SQLAlchemy
+Database File: test.db
+
+----------------------------------------
+
+🔐 SECURITY FEATURES
+========================================
+• Token-based route protection
+• Dynamic user-email watermark overlay
+• Protected dashboard routing
+• Logout session clearing
+• Git history cleaned (no large file leaks)
+
+----------------------------------------
+
+🛠 DEV ENVIRONMENT
+========================================
+Version Control: Git
+Repository Hosting: GitHub
+Node Package Manager: npm
+Python Virtual Environment: venv
