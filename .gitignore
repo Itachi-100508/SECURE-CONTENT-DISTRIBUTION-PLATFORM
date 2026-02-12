@@ -1,0 +1,9 @@
+# Ignore videos
+frontend/public/videos/
+
+# Ignore database
+backend/test.db
+
+# Ignore python cache
+**/__pycache__/
+*.pyc
